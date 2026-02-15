@@ -1,4 +1,3 @@
-Sip 👍 Aku bikinin **konten README.md** yang rapi, jelas, dan siap langsung kamu **copy–paste** lalu **modifikasi file `README.md`** di project-mu.
 
 ---
 
