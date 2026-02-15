@@ -1,13 +1,13 @@
 package routes
 
 import (
-	"bookstore-api/controllers"
-	"bookstore-api/middlewares"
+	"bookstore-management-api/controllers"
+	"bookstore-management-api/middlewares"
 
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterRoutes(r *gin.Engine) {
+func StartServer(r *gin.Engine) {
 	api := r.Group("/api")
 
 	// auth

@@ -11,29 +11,33 @@ import (
 
 var DB *sql.DB
 
-func ConnectDB() {
-	var err error
-
-	host := os.Getenv("DB_HOST")
-	user := os.Getenv("DB_USER")
-	password := os.Getenv("DB_PASSWORD")
-	dbname := os.Getenv("DB_NAME")
-	port := os.Getenv("DB_PORT")
-
+func ConnectDB() func() {
 	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
-		host, user, password, dbname, port,
+		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
+		os.Getenv("DB_HOST"),
+		os.Getenv("DB_PORT"),
+		os.Getenv("DB_USER"),
+		os.Getenv("DB_PASSWORD"),
+		os.Getenv("DB_NAME"),
+		os.Getenv("DB_SSLMODE"),
 	)
 
-	DB, err = sql.Open("postgres", dsn)
+	db, err := sql.Open("postgres", dsn)
 	if err != nil {
 		log.Fatal("failed to open db:", err)
 	}
 
-	err = DB.Ping()
-	if err != nil {
-		log.Fatal("failed to ping db:", err)
+	if err := db.Ping(); err != nil {
+		log.Fatal("failed to connect db:", err)
 	}
 
+	DB = db
 	log.Println("Database connected")
+
+	return func() {
+		if err := db.Close(); err != nil {
+			log.Println("failed to close db:", err)
+		}
+		log.Println("Database closed")
+	}
 }
